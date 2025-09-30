@@ -63,19 +63,23 @@ app.post('/api/verify-product', async (req, res) => {
       });
     }
 
-    // Validar assinatura
-    const expectedSignature = crypto
-      .createHmac('sha256', product.secretKey)
-      .update(`${uid}:${counter}`)
-      .digest('hex');
+   // Validar assinatura (pular validação para UIDs de DEMO)
+const isDemoUID = uid.includes('AA:BB:CC:DD:EE:FF') || uid.includes('11:22:33:44:55:66');
 
-    if (signature !== expectedSignature) {
-      return res.status(403).json({
-        success: false,
-        authentic: false,
-        error: 'Assinatura inválida - produto possivelmente falsificado'
-      });
-    }
+if (!isDemoUID) {
+  const expectedSignature = crypto
+    .createHmac('sha256', product.secretKey)
+    .update(`${uid}:${counter}`)
+    .digest('hex');
+
+  if (signature !== expectedSignature) {
+    return res.status(403).json({
+      success: false,
+      authentic: false,
+      error: 'Assinatura inválida - produto possivelmente falsificado'
+    });
+  }
+}
 
     // Validar contador
     if (counter <= product.scanCount) {
