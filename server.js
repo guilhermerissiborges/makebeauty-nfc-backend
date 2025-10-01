@@ -30,6 +30,7 @@ const ProductSchema = new mongoose.Schema({
   secretKey: String,
   scanCount: { type: Number, default: 0 },
   isActive: { type: Boolean, default: true },
+   syncedFromSheets: { type: Boolean, default: false },
   scans: [{
     timestamp: Date,
     location: String
