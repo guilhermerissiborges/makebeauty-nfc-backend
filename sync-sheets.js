@@ -176,6 +176,7 @@ async function syncSheetsToMongoDB(spreadsheetId) {
           existingProduct.manufacturingDateTime = manufacturingDateTime;
           existingProduct.manufacturingDate = new Date(manufacturingDateTime.toDateString());
           existingProduct.batchNumber = lote;
+          existingProduct.syncedFromSheets = true;  // ← ADICIONAR ESTA LINHA
           await existingProduct.save();
           
           console.log(`🔄 Atualizado: ${nfcUID}`);

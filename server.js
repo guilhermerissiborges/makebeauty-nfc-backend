@@ -44,9 +44,11 @@ app.post('/api/verify-product', async (req, res) => {
   try {
     const { uid, signature, counter } = req.body;
 
-    // Buscar produto
-    const product = await Product.findOne({ nfcUID: uid });
 
+    // Buscar produto
+    const product = await Product.findOne({ nfcUID: normalizedUID });
+    // Normalizar UID - remover ":" e espaços
+const normalizedUID = uid.replace(/[:\s]/g, '').toUpperCase();
     if (!product) {
       return res.status(404).json({
         success: false,
@@ -64,7 +66,7 @@ app.post('/api/verify-product', async (req, res) => {
     }
 
    // Validar assinatura (pular validação para UIDs de DEMO e produtos da planilha)
-const isDemoUID = uid.includes('AA:BB:CC:DD:EE:FF') || uid.includes('11:22:33:44:55:66');
+const isDemoUID = normalizedUID.includes('AABBCCDDDEEFF') || normalizedUID.includes('112233445566');
 const isFromSheets = product.syncedFromSheets === true;
 
 if (!isDemoUID && !isFromSheets) {
