@@ -68,7 +68,11 @@ const product = await Product.findOne({ nfcUID: normalizedUID });
    // Validar assinatura (pular validação para UIDs de DEMO e produtos da planilha)
 const isDemoUID = normalizedUID.includes('AABBCCDDDEEFF') || normalizedUID.includes('112233445566');
 const isFromSheets = product.syncedFromSheets === true;
-
+// DEBUG - ver valores
+console.log('DEBUG - UID:', normalizedUID);
+console.log('DEBUG - isDemoUID:', isDemoUID);
+console.log('DEBUG - syncedFromSheets:', product.syncedFromSheets);
+console.log('DEBUG - isFromSheets:', isFromSheets);
 if (!isDemoUID && !isFromSheets) {
   const expectedSignature = crypto
     .createHmac('sha256', product.secretKey)
