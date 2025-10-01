@@ -191,7 +191,29 @@ app.get('/', (req, res) => {
     }
   });
 });
-
+// ENDPOINT DE DEBUG - Ver dados do produto
+app.get('/api/debug/product/:uid', async (req, res) => {
+  try {
+    const uid = req.params.uid;
+    const product = await Product.findOne({ nfcUID: uid });
+    
+    if (!product) {
+      return res.json({ found: false, uid });
+    }
+    
+    res.json({
+      found: true,
+      uid: product.nfcUID,
+      productId: product.productId,
+      syncedFromSheets: product.syncedFromSheets,
+      hasSecretKey: !!product.secretKey,
+      manufacturingDateTime: product.manufacturingDateTime,
+      isActive: product.isActive
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
