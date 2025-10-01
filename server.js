@@ -44,11 +44,11 @@ app.post('/api/verify-product', async (req, res) => {
   try {
     const { uid, signature, counter } = req.body;
 
-
-    // Buscar produto
-    const product = await Product.findOne({ nfcUID: normalizedUID });
-    // Normalizar UID - remover ":" e espaços
+// Normalizar UID - remover ":" e espaços
 const normalizedUID = uid.replace(/[:\s]/g, '').toUpperCase();
+
+// Buscar produto
+const product = await Product.findOne({ nfcUID: normalizedUID });
     if (!product) {
       return res.status(404).json({
         success: false,
