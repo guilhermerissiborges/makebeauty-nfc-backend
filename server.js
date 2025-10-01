@@ -63,10 +63,11 @@ app.post('/api/verify-product', async (req, res) => {
       });
     }
 
-   // Validar assinatura (pular validação para UIDs de DEMO)
+   // Validar assinatura (pular validação para UIDs de DEMO e produtos da planilha)
 const isDemoUID = uid.includes('AA:BB:CC:DD:EE:FF') || uid.includes('11:22:33:44:55:66');
+const isFromSheets = product.syncedFromSheets === true;
 
-if (!isDemoUID) {
+if (!isDemoUID && !isFromSheets) {
   const expectedSignature = crypto
     .createHmac('sha256', product.secretKey)
     .update(`${uid}:${counter}`)
