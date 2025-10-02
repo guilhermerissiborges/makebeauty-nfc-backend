@@ -89,13 +89,15 @@ if (!isDemoUID && !isFromSheets) {
   }
 }
 
-    // Validar contador
-    if (counter <= product.scanCount) {
-      return res.status(403).json({
-        success: false,
-        authentic: false,
-        error: 'Contador de leituras inválido - tag possivelmente clonada'
-      });
+   // Validar contador (pular validação para produtos da planilha e DEMO)
+    if (!isDemoUID && !isFromSheets) {
+      if (counter <= product.scanCount) {
+        return res.status(403).json({
+          success: false,
+          authentic: false,
+          error: 'Contador de leituras inválido - tag possivelmente clonada'
+        });
+      }
     }
 
     // Atualizar produto
