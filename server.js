@@ -202,7 +202,7 @@ app.get('/', (req, res) => {
 });
 // ENDPOINT DE DEBUG - Ver dados do produto
 app.get('/api/debug/product/:uid', async (req, res) => {
- try {
+  try {
     const uid = req.params.uid.replace(/[:\s]/g, '').toUpperCase();
     const product = await Product.findOne({ nfcUID: uid });
     
@@ -230,14 +230,12 @@ app.get('/api/debug/product/:uid', async (req, res) => {
       scanCount: product.scanCount,
       totalScans: product.scans?.length || 0,
       isActive: product.isActive,
-      createdAt: product.createdAt,
-      
-      // DEBUG EXTRA: Ver objeto completo
-      _raw: product.toObject()
+      createdAt: product.createdAt
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
